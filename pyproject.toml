@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "azurechatgpt"
+version = "0.1.0"
+description = ""
+authors = ["Ciprian Turcu <ciprian.turcu@globallogic.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
