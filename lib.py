@@ -44,6 +44,24 @@ def initial_object_prompts():
     return custom_messages
 
 
+def prompt_request(prompt_text):
+    custom_messages = []
+
+    custom_messages.append(
+        {
+            "role": "system",
+            "content": "You are an AI assistant that helps people find information.",
+        }
+    )
+    custom_messages.append(
+        {
+            "role": "user",
+            "content": prompt_text,
+        },
+    )
+    return custom_messages
+
+
 def process_response(response):
     if st.session_state.submitted == True:
         try:
@@ -71,4 +89,32 @@ def process_response(response):
                                     # )
         except Exception as e:
             print("OpenAI Response Streaming error: " + str(e))
-            # return 503
+
+
+def process_terminal_response(response):
+    try:
+        final_response = ""
+        for chunk in response:
+            choices = chunk["choices"]
+            isChoicesGreaterThanZero = len(choices) > 0
+            if isChoicesGreaterThanZero:
+                delta = choices[0].delta
+                isDeltaExists = len(delta) > 0
+                if isDeltaExists and "content" in delta:
+                    content = delta["content"]
+                    isContentExists = len(content) > 0
+                    if isContentExists:
+                        if (
+                            isChoicesGreaterThanZero
+                            and isDeltaExists
+                            and isContentExists
+                        ):
+                            final_response = final_response + content
+                            # st.write(final_response)
+                            # st.session_state.final_response = (
+                            #     st.session_state.final_response + content
+                            # )
+        print("\nAnswer: \n" + final_response)
+    except Exception as e:
+        print("OpenAI Response Streaming error: " + str(e))
+        # return 503
