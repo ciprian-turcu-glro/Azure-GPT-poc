@@ -7,6 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+streamlit = "^1.29.0"
+openai = "0.28.0"
+mypy = "^1.8.0"
+python-dotenv = "^1.0.0"
 
 
 [build-system]
