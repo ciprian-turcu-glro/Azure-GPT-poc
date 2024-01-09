@@ -1,0 +1,1 @@
+this folder contains the approach for fine tuning using openAI API - Azure fine tuning is done trough it's web interface and new custom models creation
