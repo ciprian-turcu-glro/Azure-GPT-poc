@@ -1,4 +1,5 @@
 import os
+import time
 import streamlit as st
 import openai
 from dotenv import load_dotenv
@@ -20,7 +21,6 @@ def initialise_variables(session_variables):
 
 def on_run_clicked():
     st.session_state.submitted = False if st.session_state.submitted == True else True
-    print(st.session_state.field_textarea_value)
     st.session_state.final_response = ""
     if st.session_state.submitted == False:
         st.session_state.field_textarea_value = ""
@@ -82,11 +82,18 @@ def process_response(response):
                                     and isDeltaExists
                                     and isContentExists
                                 ):
-                                    final_response = final_response + content
-                                    st.write(final_response)
-                                    # st.session_state.final_response = (
-                                    #     st.session_state.final_response + content
-                                    # )
+                                    print(content)
+                                    # final_response = final_response + content
+                                    old_word=''
+                                    for word in content:
+                                        final_response+=word
+                                        if word != old_word:
+                                            st.write(final_response)
+                                            st.session_state.final_response = (
+                                                st.session_state.final_response + word 
+                                                )
+                                            time.sleep(0.03)
+                                            old_word=word
         except Exception as e:
             print("OpenAI Response Streaming error: " + str(e))
 
@@ -94,6 +101,7 @@ def process_response(response):
 def process_terminal_response(response):
     try:
         final_response = ""
+        print("\nAnswer: \n")
         for chunk in response:
             choices = chunk["choices"]
             isChoicesGreaterThanZero = len(choices) > 0
@@ -114,7 +122,7 @@ def process_terminal_response(response):
                             # st.session_state.final_response = (
                             #     st.session_state.final_response + content
                             # )
-        print("\nAnswer: \n" + final_response)
+        print(final_response)
     except Exception as e:
         print("OpenAI Response Streaming error: " + str(e))
         # return 503
