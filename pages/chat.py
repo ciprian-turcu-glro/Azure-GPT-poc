@@ -12,7 +12,7 @@ session_variables = [
 # method to set the initialised variables to state variables
 initialise_variables(session_variables)
 
-custom_messages = initial_object_prompts()
+custom_messages = prompt_request()
 
 
 completion = openai.ChatCompletion.create(

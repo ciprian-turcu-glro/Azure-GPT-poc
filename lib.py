@@ -26,6 +26,17 @@ def on_run_clicked():
         st.session_state.field_textarea_value = ""
 
 
+def on_suggestion_clicked(count):
+    if count == 1:
+        st.session_state.field_textarea_value = (
+            "Why didn't Anna go out for a walk on tuesday?"
+        )
+    elif count == 2:
+        st.session_state.field_textarea_value = (
+            "How many fruit did Anna start her walk with?"
+        )
+
+
 def initial_object_prompts():
     custom_messages = []
 
@@ -58,6 +69,13 @@ def prompt_request(prompt_text, custom_messages=[]):
                 "content": prompt_text,
             },
         )
+        custom_messages.append(
+            {
+                "role": "user",
+                "content": st.session_state.field_textarea_value,
+            },
+        )
+
     else:
         custom_messages.append(
             {

@@ -8,11 +8,12 @@ session_variables = [
     {"name": "field_textarea_value", "value": ""},
     {"name": "final_response", "value": ""},
 ]
+rag_story = "Anna is a simple country girl, she has a basket of 6 apples, 2 pears and 5 bannanas. Today is wednesday for Anna and she went out for a walk because she was feeling happy and wanted to enjoy the bright sun and the day before it was raining the entire day, so she decided to go out with a basket to the market and buy some fruit. On her way home she ate 2 apples and a bannana."
 
 # method to set the initialised variables to state variables
 initialise_variables(session_variables)
 
-custom_messages = initial_object_prompts()
+custom_messages = prompt_request(rag_story, [])
 
 
 completion = openai.ChatCompletion.create(
@@ -28,10 +29,22 @@ completion = openai.ChatCompletion.create(
 )
 
 
-st.title("RAG GPT4 application")
-"This page has context given to it so the user can prompt and get relevant information based on the content provided. The purpose of this page is to provide the user with specific information from the given input text"
+st.title("Simple RAG")
+"***You have the following text introduced in the prompt***:"
+rag_story
+st.button(
+    label="Suggestion 1",
+    key=1,
+    on_click=lambda: on_suggestion_clicked(1),
+)
+st.button(
+    label="Suggestion 2",
+    key=2,
+    on_click=lambda: on_suggestion_clicked(2),
+)
 st.session_state.field_textarea_value = st.text_input(
-    label="What would you like to know?:",
+    value=st.session_state.field_textarea_value,
+    label="your prompt:",
 )
 st.button(
     label="Send" if st.session_state.submitted == False else "Clear",
