@@ -28,9 +28,10 @@ completion = openai.ChatCompletion.create(
 )
 
 
-st.title("GPT4 application")
+st.title("RAG GPT4 application")
+"This page has context given to it so the user can prompt and get relevant information based on the content provided. The purpose of this page is to provide the user with specific information from the given input text"
 st.session_state.field_textarea_value = st.text_input(
-    label="Ask a question:",
+    label="What would you like to know?:",
 )
 st.button(
     label="Send" if st.session_state.submitted == False else "Clear",
