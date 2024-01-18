@@ -44,21 +44,28 @@ def initial_object_prompts():
     return custom_messages
 
 
-def prompt_request(prompt_text):
-    custom_messages = []
+def prompt_request(prompt_text, custom_messages=[]):
+    if len(custom_messages) < 1:
+        custom_messages.append(
+            {
+                "role": "system",
+                "content": "You are an AI assistant that helps people find information.",
+            }
+        )
+        custom_messages.append(
+            {
+                "role": "user",
+                "content": prompt_text,
+            },
+        )
+    else:
+        custom_messages.append(
+            {
+                "role": "user",
+                "content": prompt_text,
+            },
+        )
 
-    custom_messages.append(
-        {
-            "role": "system",
-            "content": "You are an AI assistant that helps people find information.",
-        }
-    )
-    custom_messages.append(
-        {
-            "role": "user",
-            "content": prompt_text,
-        },
-    )
     return custom_messages
 
 
@@ -84,16 +91,16 @@ def process_response(response):
                                 ):
                                     print(content)
                                     # final_response = final_response + content
-                                    old_word=''
-                                    for word in content:
-                                        final_response+=word
+                                    old_word = ""
+                                    for word in content.split(" "):
+                                        final_response += " " + word
                                         if word != old_word:
                                             st.write(final_response)
-                                            st.session_state.final_response = (
-                                                st.session_state.final_response + word 
-                                                )
-                                            time.sleep(0.03)
-                                            old_word=word
+                                            # st.session_state.final_response = (
+                                            #     st.session_state.final_response + word
+                                            #     )
+                                            time.sleep(0.1)
+                                            old_word = word
         except Exception as e:
             print("OpenAI Response Streaming error: " + str(e))
 
