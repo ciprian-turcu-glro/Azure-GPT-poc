@@ -12,8 +12,13 @@ session_variables = [
 # method to set the initialised variables to state variables
 initialise_variables(session_variables)
 
-custom_messages = initial_object_prompts()
 
+st.title("GPT4 application")
+prompt = st.session_state.field_textarea_value = st.text_input(
+    label="Ask a question:",
+)
+
+custom_messages = prompt_request(custom_messages=[], pre_prompt_text="", prompt=prompt)
 
 completion = openai.ChatCompletion.create(
     engine="Chip-GPT4-32k",
@@ -27,11 +32,6 @@ completion = openai.ChatCompletion.create(
     stop=None,
 )
 
-
-st.title("GPT4 application")
-st.session_state.field_textarea_value = st.text_input(
-    label="Ask a question:",
-)
 st.button(
     label="Send" if st.session_state.submitted == False else "Clear",
     key=4,
