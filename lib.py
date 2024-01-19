@@ -26,15 +26,19 @@ def on_run_clicked():
         st.session_state.field_textarea_value = ""
 
 
-def on_suggestion_clicked(count):
-    if count == 1:
-        st.session_state.field_textarea_value = (
-            "Why didn't Anna go out for a walk on tuesday?"
-        )
-    elif count == 2:
-        st.session_state.field_textarea_value = (
-            "How many fruit did Anna start her walk with?"
-        )
+def is_option_match(option, index):
+    return st.session_state.rag_options.index(option) == index
+
+
+def generate_custom_text(option):
+    if is_option_match(option, 1):
+        return "Why didn't Anna go out for a walk on tuesday?"
+    elif is_option_match(option, 2):
+        return "How many fruit did Anna start her walk with?"
+    elif is_option_match(option, 3):
+        return "Where was Anna going?"
+    else:
+        return ""
 
 
 def initial_object_prompts():
@@ -49,13 +53,13 @@ def initial_object_prompts():
     custom_messages.append(
         {
             "role": "user",
-            "content": st.session_state.field_textarea_value,
+            "content": "",
         },
     )
     return custom_messages
 
 
-def prompt_request(prompt_text, custom_messages=[]):
+def prompt_request(pre_prompt_text, custom_messages=[], prompt=""):
     if len(custom_messages) < 1:
         custom_messages.append(
             {
@@ -66,13 +70,13 @@ def prompt_request(prompt_text, custom_messages=[]):
         custom_messages.append(
             {
                 "role": "user",
-                "content": prompt_text,
+                "content": pre_prompt_text,
             },
         )
         custom_messages.append(
             {
                 "role": "user",
-                "content": st.session_state.field_textarea_value,
+                "content": prompt,
             },
         )
 
@@ -80,7 +84,7 @@ def prompt_request(prompt_text, custom_messages=[]):
         custom_messages.append(
             {
                 "role": "user",
-                "content": prompt_text,
+                "content": pre_prompt_text,
             },
         )
 
