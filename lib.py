@@ -155,3 +155,7 @@ def process_terminal_response(response):
     except Exception as e:
         print("OpenAI Response Streaming error: " + str(e))
         # return 503
+
+
+def read_pdf():
+    pass
