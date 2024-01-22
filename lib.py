@@ -3,6 +3,7 @@ import time
 import streamlit as st
 import openai
 from dotenv import load_dotenv
+from pypdf import PdfReader
 
 load_dotenv()
 
@@ -157,5 +158,21 @@ def process_terminal_response(response):
         # return 503
 
 
-def read_pdf():
-    pass
+def word_wrap(string, n_chars=72):
+    # Wrap a string at the next space after n_chars
+    if len(string) < n_chars:
+        return string
+    else:
+        return string[:n_chars].rsplit(' ', 1)[0] + '\n' + word_wrap(string[len(string[:n_chars].rsplit(' ', 1)[0])+1:], n_chars)
+    
+
+def read_pdf(filename: str):
+    # filename = 'data/psychologia_poznawcza.pdf'
+    st.session_state.submitted = False if st.session_state.submitted == True else True
+    reader = PdfReader(filename)
+    
+    pdf_texts = [p.extract_text().strip() for p in reader.pages]
+
+    # Filter the empty strings
+    pdf_texts = [text for text in pdf_texts if text]
+    st.session_state.pdf_text = pdf_texts
