@@ -167,10 +167,11 @@ def word_wrap(string, n_chars=72):
     
 
 def read_pdf(filename: str):
-    # filename = 'data/psychologia_poznawcza.pdf'
     st.session_state.submitted = False if st.session_state.submitted == True else True
     reader = PdfReader(filename)
     pdf_texts = [p.extract_text().strip() for p in reader.pages]
+
     # Filter the empty strings
     pdf_texts = [text for text in pdf_texts if text]
     st.session_state.pdf_text = pdf_texts
+    

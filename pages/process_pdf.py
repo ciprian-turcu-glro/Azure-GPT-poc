@@ -2,6 +2,7 @@ import openai
 import streamlit as st
 from lib import *
 
+
 # initialized variables state names and values
 session_variables = [
     {"name": "submitted", "value": False},
