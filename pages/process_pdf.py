@@ -24,5 +24,4 @@ st.button(
     key=4,
     on_click=lambda: read_pdf(st.session_state.field_textarea_value),
 )
-
 st.text_area("LOADED .PDF FILE", st.session_state.pdf_text)
