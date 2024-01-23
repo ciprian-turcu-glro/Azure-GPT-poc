@@ -19,7 +19,7 @@ rag_story = "Anna is a simple country girl, she has a basket of 6 apples, 2 pear
 initialise_variables(session_variables)
 
 
-st.title("Simple RAG")
+st.title("Simple Context Prompting")
 "***You have the following text introduced in the prompt***:"
 rag_story
 

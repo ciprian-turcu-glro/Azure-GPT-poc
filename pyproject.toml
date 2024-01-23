@@ -11,6 +11,11 @@ streamlit = "^1.29.0"
 openai = "0.28.0"
 mypy = "^1.8.0"
 python-dotenv = "^1.0.0"
+helper-utils = "^0.0.8"
+pypdf = "^4.0.0"
+langchain = "^0.1.2"
+chromadb = "^0.4.22"
+sentence-transformers = "^2.2.2"
 
 
 [build-system]
