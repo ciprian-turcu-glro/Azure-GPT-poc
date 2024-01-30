@@ -18,7 +18,7 @@ prompt = st.session_state.field_textarea_value = st.text_input(
     label="Ask a question:",
 )
 
-custom_messages = prompt_request(custom_messages=[], pre_prompt_text="", prompt=prompt)
+custom_messages = custom_messages_generating(custom_messages=[], pre_prompt_text="", prompt=prompt)
 
 completion = openai.ChatCompletion.create(
     engine="Chip-GPT4-32k",

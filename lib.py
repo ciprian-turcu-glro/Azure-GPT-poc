@@ -2,7 +2,12 @@ import os
 import time
 import streamlit as st
 import openai
-from dotenv import load_dotenv
+
+from dotenv import load_dotenv, find_dotenv
+
+_ = load_dotenv(find_dotenv())  # read local .env file
+openai.api_key = os.environ["OPENAI_API_KEY"]
+
 
 load_dotenv()
 
@@ -39,6 +44,17 @@ def generate_custom_text(option):
         return "Where was Anna going?"
     else:
         return ""
+def generate_custom_text_for_simple_query_expansion(option):
+    if is_option_match(option, 1):
+        return "when was the  an assessment of the useful lives of our server and network equipment completed ? which month was that in?"
+    elif is_option_match(option, 2):
+        return "What was the total annual revenue for 2022?"
+    elif is_option_match(option, 3):
+        return "how many people where mentioned in the document in total?"
+    else:
+        return ""
+    
+    
 
 
 def initial_object_prompts():
@@ -59,7 +75,7 @@ def initial_object_prompts():
     return custom_messages
 
 
-def prompt_request(pre_prompt_text, custom_messages=[], prompt=""):
+def custom_messages_generating(pre_prompt_text, custom_messages=[], prompt=""):
     if len(custom_messages) < 1:
         custom_messages.append(
             {
@@ -155,3 +171,32 @@ def process_terminal_response(response):
     except Exception as e:
         print("OpenAI Response Streaming error: " + str(e))
         # return 503
+
+
+def openai_prompt_request(query, model="Chip-GPT4-32k", custom_messages=[]):
+    messages = [
+        {
+            "role": "system",
+            "content": "You are a helpful expert financial research assistant. Provide an example answer to the given question, that might be found in a document like an annual report. ",
+        },
+        {"role": "user", "content": query},
+    ]
+
+    response = openai.ChatCompletion.create(
+        engine=model,
+        messages=messages if len(custom_messages) == 0 else custom_messages,
+        temperature=0.7,
+        stream=False,
+        max_tokens=800,
+        top_p=0.95,
+        frequency_penalty=0,
+        presence_penalty=0,
+        stop=None,
+    )
+    content = response.choices[0].message.content
+    print('-----------------------------------------')
+    print('-----------------------------------------')
+    print(content)
+    print('-----------------------------------------')
+    print('-----------------------------------------')
+    return content

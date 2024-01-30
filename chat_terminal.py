@@ -6,7 +6,7 @@ from lib import *
 input_text = ""
 while True:
     user_input = input("Enter a prompt (type 'quit' to exit): ")
-    custom_messages = prompt_request(user_input)
+    custom_messages = custom_messages_generating(user_input)
     if user_input.lower() == "quit":
         print("Exiting the app...")
         break

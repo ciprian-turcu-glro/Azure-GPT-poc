@@ -35,7 +35,7 @@ prompt_value = st.text_input(
     label="your prompt:",
 )
 
-custom_messages = prompt_request(rag_story, [], prompt=prompt_value)
+custom_messages = custom_messages_generating(rag_story, [], prompt=prompt_value)
 completion = openai.ChatCompletion.create(
     engine="Chip-GPT4-32k",
     messages=custom_messages,

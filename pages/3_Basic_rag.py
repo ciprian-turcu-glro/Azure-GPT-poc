@@ -95,7 +95,7 @@ if st.session_state.submitted:
     retrieved_documents = results["documents"][0]
 
     # for document in retrieved_documents:
-        # document
+    # document
 #
 
 # ------------------------------------------------------------------------------------------
@@ -133,7 +133,9 @@ if st.session_state.submitted:
         },
     ]
     #
-    custom_messages = prompt_request(rag_story, messages, prompt=prompt_value)
+    custom_messages = custom_messages_generating(
+        rag_story, messages, prompt=prompt_value
+    )
     completion = openai.ChatCompletion.create(
         engine="Chip-GPT4-32k",
         messages=custom_messages,
