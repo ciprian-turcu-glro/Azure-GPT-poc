@@ -12,7 +12,7 @@ session_variables = [
     {"name": "rag_selectbox", "value": ""},
     {
         "name": "rag_options",
-        "value": ["Custom", "Opt 1", "Opt 2", "Opt 3"],
+        "value": ["Custom", "Predefined question"],
     },
 ]
 run_prompt = False
@@ -111,7 +111,7 @@ rag_option = st.selectbox(
     (st.session_state.rag_options),
     key=0,
 )
-prompt_value = generate_custom_text(rag_option)
+prompt_value = generate_custom_text_for_simple_rag(rag_option)
 prompt_value = st.text_input(
     key="field_prompt_value",
     value=prompt_value,
