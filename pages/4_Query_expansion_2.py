@@ -31,7 +31,7 @@ initialise_variables(session_variables)
 # ----------------
 st.title("RAG Query expansion with generated answers")
 
-'Expansion with generated answers if basically prompting the LLM with the original prompt and using it\'s answer, prefixing it to the original prompt when doing retrieval with Chroma'
+"Expansion with generated answers if basically prompting the LLM with the original prompt + an ask to generate x(5) similar questions and using it's answer, prefixing it to the original prompt when doing retrieval with Chroma"
 
 rag_option = st.selectbox(
     "Automatic sugestions:",
@@ -68,7 +68,9 @@ if st.session_state.submitted:
         {
             "role": "system",
             "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
-            "You will be shown the user's question, and the relevant information from the annual report. Answer the user's question using only this information.",
+            "Suggest up to 5 additional related questions to help them find the information they need, for the provided question"
+            "Suggest only short questions without compound sentances. Suggest a variety of questions that cover different aspects of the topic."
+            "Make sure they are complete questions, and they are related to the original question",
         },
         {
             "role": "user",
