@@ -51,7 +51,20 @@ prompt_value = st.text_input(
 # ----------------
 if st.session_state.submitted:
     # first request to the LLM directly
-    augmented_response = openai_prompt_request(prompt_value)
+    messages = [
+        {
+            "role": "system",
+            "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
+            "Suggest up to 5 additional related questions to help them find the information they need, for the provided question"
+            "Suggest only short questions without compound sentances. Suggest a variety of questions that cover different aspects of the topic."
+            "Make sure they are complete questions, and they are related to the original question.",
+        },
+        {
+            "role": "user",
+            "content": f"Question: {prompt_value}",
+        },
+    ]
+    augmented_response = openai_prompt_request(prompt_value, custom_messages=messages)
     print("############################################################1")
     augmented_prompt = augmented_response + prompt_value
     # generate propper request for
@@ -67,10 +80,8 @@ if st.session_state.submitted:
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
-            "Suggest up to 5 additional related questions to help them find the information they need, for the provided question"
-            "Suggest only short questions without compound sentances. Suggest a variety of questions that cover different aspects of the topic."
-            "Make sure they are complete questions, and they are related to the original question",
+             "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
+            "You will be shown the user's question, and the relevant information from the annual report. Answer the user's question using only this information.",
         },
         {
             "role": "user",
