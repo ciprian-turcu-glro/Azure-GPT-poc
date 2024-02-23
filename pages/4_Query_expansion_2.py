@@ -65,18 +65,14 @@ if st.session_state.submitted:
         },
     ]
     augmented_response = openai_prompt_request(prompt_value, custom_messages=messages)
-    print("############################################################1")
     augmented_prompt = augmented_response + prompt_value
     # generate propper request for
     custom_messages = custom_messages_generating(rag_story, [], prompt=augmented_prompt)
-    print("############################################################2")
     completion = openai_prompt_request(
         augmented_prompt, "Chip-GPT4-32k", custom_messages
     )
     augmented_prompted_response = completion + prompt_value
-    print("############################################################3")
     retrieved_documents = apply_rag(query=augmented_prompted_response)
-    print("############################################################4")
     messages = [
         {
             "role": "system",

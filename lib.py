@@ -45,13 +45,15 @@ def generate_custom_text(option):
     else:
         return ""
 
+
 def generate_custom_text_for_simple_rag(option):
     if is_option_match(option, 1):
         return "What was the total annual revenue in 2022?"
-    
+
     else:
         return ""
-    
+
+
 def generate_custom_text_for_simple_query_expansion(option):
     if is_option_match(option, 1):
         return "when was the  an assessment of the useful lives of our server and network equipment completed ? which month was that in?"
@@ -207,16 +209,21 @@ def openai_prompt_request(
         stop=None,
     )
     content = response.choices[0].message.content
-    print('------------------------------------------')
-    print('------------------------------------------')
+    print("------------------------------------------")
+    print("------------------------------------------")
     print(content)
-    print('------------------------------------------')
-    print('------------------------------------------')
+    print("------------------------------------------")
+    print("------------------------------------------")
     return content
 
 
 # RAG
-def apply_rag(query, pdf="data/2022_Annual_Report.pdf"):
+def apply_rag(
+    query,
+    pdf="data/2022_Annual_Report.pdf",
+    n_results=5,
+    query_include=[["metadatas", "documents", "distances"]],
+):
     if st.session_state.submitted:
         # Step 1: load the text content from the pdf
         #
@@ -287,6 +294,8 @@ def apply_rag(query, pdf="data/2022_Annual_Report.pdf"):
         # Step 4: query the collection with the prompt data:
         # query = "What was the total revenue?"
 
-        results = chroma_collection.query(query_texts=[query], n_results=5)
+        results = chroma_collection.query(
+            query_texts=[query], n_results=n_results, include=query_include
+        )
         retrieved_documents = results["documents"][0]
         return retrieved_documents

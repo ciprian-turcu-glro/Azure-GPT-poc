@@ -29,9 +29,9 @@ initialise_variables(session_variables)
 # UI
 #
 # ----------------
-st.title("RAG Query expansion with Multiple Queries")
+st.title("RAG Query expansion with generated answers")
 
-"Expansion with generated answers if basically prompting the LLM with the original prompt and using it's answer, prefixing it to the original prompt when doing retrieval with Chroma"
+"Expansion with generated answers if basically prompting the LLM with the original prompt + an ask to generate x(5) similar questions and using it's answer, prefixing it to the original prompt when doing retrieval with Chroma"
 
 rag_option = st.selectbox(
     "Automatic sugestions:",
@@ -51,7 +51,20 @@ prompt_value = st.text_input(
 # ----------------
 if st.session_state.submitted:
     # first request to the LLM directly
-    augmented_response = openai_prompt_request(prompt_value)
+    messages = [
+        {
+            "role": "system",
+            "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
+            "Suggest up to 5 additional related questions to help them find the information they need, for the provided question"
+            "Suggest only short questions without compound sentances. Suggest a variety of questions that cover different aspects of the topic."
+            "Make sure they are complete questions, and they are related to the original question.",
+        },
+        {
+            "role": "user",
+            "content": f"Question: {prompt_value}",
+        },
+    ]
+    augmented_response = openai_prompt_request(prompt_value, custom_messages=messages)
     augmented_prompt = augmented_response + prompt_value
     # generate propper request for
     custom_messages = custom_messages_generating(rag_story, [], prompt=augmented_prompt)
@@ -59,7 +72,11 @@ if st.session_state.submitted:
         augmented_prompt, "Chip-GPT4-32k", custom_messages
     )
     augmented_prompted_response = completion + prompt_value
-    retrieved_documents = apply_rag(query=augmented_prompted_response)
+    retrieved_documents = apply_rag(
+        query=augmented_prompted_response,
+        n_results=10,
+        query_include=[["documents", "embeddings"]],
+    )
     messages = [
         {
             "role": "system",
