@@ -108,7 +108,7 @@ if st.session_state.submitted:
         },
         {
             "role": "user",
-            "content": f"Question: {augmented_response+prompt_value}. \n Information: {ranked_documents}",
+            "content": f"Question: {prompt_value}. \n Information: {ranked_documents}",
         },
     ]
 
