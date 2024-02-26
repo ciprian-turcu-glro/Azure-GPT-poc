@@ -60,7 +60,7 @@ def generate_custom_text_for_simple_query_expansion(option):
     elif is_option_match(option, 2):
         return "What was the total annual revenue for 2022?"
     elif is_option_match(option, 3):
-        return "how many people where mentioned in the document in total?"
+        return "how many people do we want to recruit?"
     else:
         return ""
 
@@ -222,7 +222,7 @@ def apply_rag(
     query,
     pdf="data/2022_Annual_Report.pdf",
     n_results=5,
-    query_include=[["metadatas", "documents", "distances"]],
+    query_include=["metadatas", "documents", "distances"],
 ):
     if st.session_state.submitted:
         # Step 1: load the text content from the pdf
@@ -298,4 +298,5 @@ def apply_rag(
             query_texts=[query], n_results=n_results, include=query_include
         )
         retrieved_documents = results["documents"][0]
+        print()
         return retrieved_documents

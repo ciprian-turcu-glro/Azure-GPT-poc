@@ -1,6 +1,9 @@
 import openai
 import streamlit as st
+import numpy as np
 from lib import *
+from sentence_transformers import CrossEncoder
+
 
 # ----------------
 #
@@ -29,7 +32,7 @@ initialise_variables(session_variables)
 # UI
 #
 # ----------------
-st.title("RAG Query expansion with generated answers")
+st.title("RAG Cross encoder re-ranking")
 
 "Expansion with generated answers if basically prompting the LLM with the original prompt + an ask to generate x(5) similar questions and using it's answer, prefixing it to the original prompt when doing retrieval with Chroma"
 
@@ -50,7 +53,9 @@ prompt_value = st.text_input(
 #
 # ----------------
 if st.session_state.submitted:
-    # first request to the LLM directly
+    #
+    # first request to the LLM directly START
+    #
     messages = [
         {
             "role": "system",
@@ -66,17 +71,36 @@ if st.session_state.submitted:
     ]
     augmented_response = openai_prompt_request(prompt_value, custom_messages=messages)
     augmented_prompt = augmented_response + prompt_value
-    # generate propper request for
-    custom_messages = custom_messages_generating(rag_story, [], prompt=augmented_prompt)
-    completion = openai_prompt_request(
-        augmented_prompt, "Chip-GPT4-32k", custom_messages
-    )
-    augmented_prompted_response = completion + prompt_value
+    # # generate propper request for
+    # custom_messages = custom_messages_generating(rag_story, [], prompt=augmented_prompt)
+    # completion = openai_prompt_request(
+    #     augmented_prompt, "Chip-GPT4-32k", custom_messages
+    # )
+    #
+    # first request to the LLM directly END
+    #
+
+    # Applying RAG START
+    augmented_prompted_response = augmented_response + prompt_value
     retrieved_documents = apply_rag(
         query=augmented_prompted_response,
-        n_results=10,
-        query_include=[["documents", "embeddings"]],
+        n_results=20,
+        query_include=["documents", "distances"],
     )
+    # Applying RAG END
+
+    # re-ranking functionality START
+    cross_encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+
+    pairs = [[doc] for doc in retrieved_documents]
+    ranked_documents = []
+    scores = cross_encoder.predict(pairs)
+    for o in np.argsort(scores)[:6:-1]:
+        ranked_documents.append(retrieved_documents[o])
+
+    # re-ranking functionality END
+    print('---------------------- ranked_documents:')
+    print(ranked_documents)
     messages = [
         {
             "role": "system",
@@ -85,7 +109,7 @@ if st.session_state.submitted:
         },
         {
             "role": "user",
-            "content": f"Question: {completion+prompt_value}. \n Information: {retrieved_documents}",
+            "content": f"Question: {augmented_response+prompt_value}. \n Information: {ranked_documents}",
         },
     ]
 
