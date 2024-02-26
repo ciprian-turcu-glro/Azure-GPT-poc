@@ -95,12 +95,11 @@ if st.session_state.submitted:
     pairs = [[doc] for doc in retrieved_documents]
     ranked_documents = []
     scores = cross_encoder.predict(pairs)
-    for o in np.argsort(scores)[:6:-1]:
-        ranked_documents.append(retrieved_documents[o])
+    sorted_indices = np.argsort(scores)[::-1]
+    first_5_indices = np.array(sorted_indices[:5])
+    ranked_documents = [pairs[i] for i in first_5_indices]
 
     # re-ranking functionality END
-    print('---------------------- ranked_documents:')
-    print(ranked_documents)
     messages = [
         {
             "role": "system",

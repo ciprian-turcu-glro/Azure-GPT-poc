@@ -209,11 +209,7 @@ def openai_prompt_request(
         stop=None,
     )
     content = response.choices[0].message.content
-    print("------------------------------------------")
-    print("------------------------------------------")
-    print(content)
-    print("------------------------------------------")
-    print("------------------------------------------")
+
     return content
 
 
