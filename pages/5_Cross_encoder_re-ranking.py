@@ -18,7 +18,7 @@ session_variables = [
     {"name": "final_response", "value": ""},
     {
         "name": "rag_options",
-        "value": ["Custom", "Opt 1", "Opt 2", "Opt 3"],
+        "value": ["Custom", "Option 1", "Option 2", "Option 3", "Option 4"],
     },
 ]
 run_prompt = False
@@ -35,6 +35,7 @@ initialise_variables(session_variables)
 st.title("RAG Cross encoder re-ranking")
 
 "Expansion with generated answers if basically prompting the LLM with the original prompt + an ask to generate x(5) similar questions and using it's answer, prefixing it to the original prompt when doing retrieval with Chroma"
+"The queried chunks of documents retrieved are 20 in length and now a ranking of those chunks is made after prompting with the 5 most relevant"
 
 rag_option = st.selectbox(
     "Automatic sugestions:",

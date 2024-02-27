@@ -15,7 +15,7 @@ session_variables = [
     {"name": "final_response", "value": ""},
     {
         "name": "rag_options",
-        "value": ["Custom", "Opt 1", "Opt 2", "Opt 3"],
+        "value": ["Custom", "Option 1", "Option 2", "Option 3"],
     },
 ]
 run_prompt = False

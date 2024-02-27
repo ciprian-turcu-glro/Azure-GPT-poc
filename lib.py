@@ -61,6 +61,8 @@ def generate_custom_text_for_simple_query_expansion(option):
         return "What was the total annual revenue for 2022?"
     elif is_option_match(option, 3):
         return "how many people do we want to recruit?"
+    elif is_option_match(option,4):
+        return "what is the purpose of the Microsoft Intelligent Data 5 Platform in the context of the annual report ?"
     else:
         return ""
 
