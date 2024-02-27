@@ -20,7 +20,6 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 def initialise_variables(session_variables):
     for variable in session_variables:
         if variable["name"] not in st.session_state:
-            # print(variable["name"], ":", variable["value"])
             st.session_state[variable["name"]] = variable["value"]
 
 
@@ -142,7 +141,6 @@ def process_response(response):
                                     and isDeltaExists
                                     and isContentExists
                                 ):
-                                    print(content)
                                     # final_response = final_response + content
                                     old_word = ""
                                     for word in content.split(" "):
