@@ -1,8 +1,5 @@
-import openai
 import streamlit as st
-import numpy as np
 from lib import *
-from sentence_transformers import CrossEncoder
 
 
 # ----------------

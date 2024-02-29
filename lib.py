@@ -2,7 +2,8 @@ import os
 import time
 import streamlit as st
 import openai
-from helper_utils import load_chroma, word_wrap, project_embeddings
+
+import helper_utils as hu
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 import numpy as np
 import umap
@@ -311,7 +312,7 @@ def embedding_adapters(
 ):
     embedding_function = SentenceTransformerEmbeddingFunction()
 
-    chroma_collection = load_chroma(
+    chroma_collection = hu.load_chroma(
         filename=file,
         collection_name=collection_name,
         embedding_function=embedding_function,
@@ -320,7 +321,7 @@ def embedding_adapters(
     # embeddings
     embeddings = chroma_collection.get(include=["embeddings"])["embeddings"]
     umap_transform = umap.UMAP(random_state=0, transform_seed=0).fit(embeddings)
-    projected_dataset_embeddings = project_embeddings(embeddings, umap_transform)
+    projected_dataset_embeddings = hu.project_embeddings(embeddings, umap_transform)
 
     all_generated_queries = generate_queries()
     for query in all_generated_queries:
@@ -383,19 +384,38 @@ def embedding_adapters(
     query_embeddings = embedding_function(all_generated_queries)
     adapted_query_embeddings = np.matmul(best_matrix, np.array(query_embeddings).T).T
 
-    projected_query_embeddings = project_embeddings(query_embeddings, umap_transform)
-    projected_adapted_query_embeddings = project_embeddings(
+    projected_query_embeddings = hu.project_embeddings(query_embeddings, umap_transform)
+    projected_adapted_query_embeddings = hu.project_embeddings(
         adapted_query_embeddings, umap_transform
     )
     # Plot the projected query and retrieved documents in the embedding space
     plt.figure()
-    plt.scatter(projected_dataset_embeddings[:, 0], projected_dataset_embeddings[:, 1], s=10, color='gray')
-    plt.scatter(projected_query_embeddings[:, 0], projected_query_embeddings[:, 1], s=150, marker='X', color='r', label="original")
-    plt.scatter(projected_adapted_query_embeddings[:, 0], projected_adapted_query_embeddings[:, 1], s=150, marker='X', color='green', label="adapted")
+    plt.scatter(
+        projected_dataset_embeddings[:, 0],
+        projected_dataset_embeddings[:, 1],
+        s=10,
+        color="gray",
+    )
+    plt.scatter(
+        projected_query_embeddings[:, 0],
+        projected_query_embeddings[:, 1],
+        s=150,
+        marker="X",
+        color="r",
+        label="original",
+    )
+    plt.scatter(
+        projected_adapted_query_embeddings[:, 0],
+        projected_adapted_query_embeddings[:, 1],
+        s=150,
+        marker="X",
+        color="green",
+        label="adapted",
+    )
 
-    plt.gca().set_aspect('equal', 'datalim')
+    plt.gca().set_aspect("equal", "datalim")
     plt.title("Adapted Queries")
-    plt.axis('off')
+    plt.axis("off")
     plt.legend()
 
 
