@@ -9,6 +9,7 @@ import numpy as np
 import umap
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+import fitz # imports the pymupdf library
 
 import torch
 
@@ -25,6 +26,13 @@ openai.api_base = "https://oai-playground-canadaeast-001.openai.azure.com/"
 openai.api_version = "2023-07-01-preview"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+
+def getPyMuPDF(file):
+    doc = fitz.open(file) # open a document
+    text=""
+    for page in doc: # iterate the document pages
+        text += page.get_text()
+    return text
 
 def initialise_variables(session_variables):
     for variable in session_variables:
@@ -225,7 +233,7 @@ def openai_prompt_request(
 # RAG
 def apply_rag(
     query,
-    pdf="data/2022_Annual_Report.pdf",
+    pdf="./data/2022_Annual_Report.pdf",
     n_results=5,
     query_include=["metadatas", "documents", "distances"],
 ):
@@ -234,12 +242,15 @@ def apply_rag(
         #
         from pypdf import PdfReader
 
-        reader = PdfReader(pdf)
-        pdf_texts = [p.extract_text().strip() for p in reader.pages]
+        # reader = PdfReader(pdf)
+        reader = getPyMuPDF(pdf)
+        # pdf_texts = [p.extract_text().strip() for p in reader.pages]
+        pdf_texts = reader
 
         # Filter the empty strings
         # --
-        pdf_texts = [text for text in pdf_texts if text]
+        # pdf_texts = [text for text in pdf_texts if text]
+        print(pdf_texts)
 
         #
         # Step 2: Split by character and token

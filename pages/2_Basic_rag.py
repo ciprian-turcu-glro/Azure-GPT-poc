@@ -1,6 +1,7 @@
 import openai
 import streamlit as st
 from lib import *
+from extract_lib import *
 
 # initialized variables state names and values
 session_variables = [
@@ -25,8 +26,9 @@ if st.session_state.submitted:
     # Step 1: load the text content from the pdf
     #
     from pypdf import PdfReader
-
-    reader = PdfReader("data/2022_Annual_Report.pdf")
+    file_path = "data/2022_Annual_Report.pdf"
+    # reader = PdfReader("data/2022_Annual_Report.pdf")
+    pdf_texts = extract_text_from_doc(path=file_path)
     pdf_texts = [p.extract_text().strip() for p in reader.pages]
 
     # Filter the empty strings
