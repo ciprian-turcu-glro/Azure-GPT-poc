@@ -9,15 +9,7 @@ from lib import *
 # ----------------
 
 # initialized variables state names and values
-session_variables = [
-    {"name": "submitted", "value": False},
-    {"name": "field_textarea_value", "value": ""},
-    {"name": "final_response", "value": ""},
-    {
-        "name": "rag_options",
-        "value": ["Custom", "Option 1", "Option 2", "Option 3"],
-    },
-]
+session_variables = get_session_variables()
 run_prompt = False
 rag_story = ""
 
@@ -32,11 +24,15 @@ initialise_variables(session_variables)
 st.title("RAG Query expansion with Multiple Queries")
 
 "Expansion with generated answers if basically prompting the LLM with the original prompt and using it's answer, prefixing it to the original prompt when doing retrieval with Chroma"
-
+reader_option = st.selectbox(
+    "PDF Reader:",
+    (st.session_state.reader_options),
+    key=0,
+)
 rag_option = st.selectbox(
     "Automatic sugestions:",
     (st.session_state.rag_options),
-    key=0,
+    key=1,
 )
 prompt_value = generate_custom_text_for_simple_query_expansion(rag_option)
 prompt_value = st.text_input(

@@ -4,16 +4,7 @@ from lib import *
 from extract_lib import *
 
 # initialized variables state names and values
-session_variables = [
-    {"name": "submitted", "value": False},
-    {"name": "field_textarea_value", "value": ""},
-    {"name": "final_response", "value": ""},
-    {"name": "rag_selectbox", "value": ""},
-    {
-        "name": "rag_options",
-        "value": ["Custom", "Predefined question"],
-    },
-]
+session_variables = get_session_variables()
 run_prompt = False
 rag_story = ""
 
@@ -26,9 +17,8 @@ if st.session_state.submitted:
     # Step 1: load the text content from the pdf
     #
     from pypdf import PdfReader
-    file_path = "data/2022_Annual_Report.pdf"
-    # reader = PdfReader("data/2022_Annual_Report.pdf")
-    pdf_texts = extract_text_from_doc(path=file_path)
+
+    reader = PdfReader(file_path)
     pdf_texts = [p.extract_text().strip() for p in reader.pages]
 
     # Filter the empty strings
@@ -74,11 +64,16 @@ if st.session_state.submitted:
     # Create collection and id's for chunks in collection
     # --
     chroma_client = chromadb.Client()
-    if chroma_client.count_collections() > 0:
+    try:
+        chroma_collection = chroma_client.get_collection("microsoft_annual_report_2022")
         chroma_client.delete_collection("microsoft_annual_report_2022")
-    chroma_collection = chroma_client.create_collection(
-        "microsoft_annual_report_2022", embedding_function=embedding_function
-    )
+        chroma_collection = chroma_client.create_collection(
+            "microsoft_annual_report_2022", embedding_function=embedding_function
+        )
+    except:
+        chroma_collection = chroma_client.create_collection(
+            "microsoft_annual_report_2022", embedding_function=embedding_function
+        )
 
     # list of stringed id's for identifying the chunks of documents in the collection
     # --
@@ -103,13 +98,13 @@ if st.session_state.submitted:
 # ------------------------------------------------------------------------------------------
 
 
-st.title("Simple RAG")
+st.title("Basic RAG")
 
 
 rag_option = st.selectbox(
     "Automatic sugestions:",
     (st.session_state.rag_options),
-    key=0,
+    key=1,
 )
 prompt_value = generate_custom_text_for_simple_rag(rag_option)
 prompt_value = st.text_input(

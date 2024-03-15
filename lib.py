@@ -9,7 +9,7 @@ import numpy as np
 import umap
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-import fitz # imports the pymupdf library
+import fitz  
 
 import torch
 
@@ -28,9 +28,9 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 def getPyMuPDF(file):
-    doc = fitz.open(file) # open a document
-    text=""
-    for page in doc: # iterate the document pages
+    doc = fitz.open(file) 
+    text = ""
+    for page in doc: 
         text += page.get_text()
     return text
 
@@ -240,7 +240,7 @@ def apply_rag(
     if st.session_state.submitted:
         # Step 1: load the text content from the pdf
         #
-        from pypdf import PdfReader
+        # from pypdf import PdfReader
 
         # reader = PdfReader(pdf)
         reader = getPyMuPDF(pdf)
@@ -250,7 +250,7 @@ def apply_rag(
         # Filter the empty strings
         # --
         # pdf_texts = [text for text in pdf_texts if text]
-        print(pdf_texts)
+        # print(pdf_texts)
 
         #
         # Step 2: Split by character and token
@@ -479,3 +479,20 @@ def mse_loss(query_embedding, document_embedding, adaptor_matrix, label):
     return torch.nn.MSELoss()(
         model(query_embedding, document_embedding, adaptor_matrix), label
     )
+
+
+def get_session_variables():
+    return [
+        {"name": "submitted", "value": False},
+        {"name": "field_textarea_value", "value": ""},
+        {"name": "final_response", "value": ""},
+    {"name": "rag_selectbox", "value": ""},
+        {
+            "name": "rag_options",
+            "value": ["Custom", "Option 1", "Option 2", "Option 3", "Option 4"],
+        },
+        {
+            "name": "reader_options",
+            "value": ["pdfminer", "pyMuPDF"],
+        },
+    ]

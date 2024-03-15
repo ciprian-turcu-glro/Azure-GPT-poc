@@ -9,15 +9,8 @@ from lib import *
 # ----------------
 
 # initialized variables state names and values
-session_variables = [
-    {"name": "submitted", "value": False},
-    {"name": "field_textarea_value", "value": ""},
-    {"name": "final_response", "value": ""},
-    {
-        "name": "rag_options",
-        "value": ["Custom", "Option 1", "Option 2", "Opion 3"],
-    },
-]
+session_variables = get_session_variables()
+
 run_prompt = False
 rag_story = ""
 
