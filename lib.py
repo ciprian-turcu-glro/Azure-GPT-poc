@@ -70,7 +70,7 @@ def generate_custom_text_for_simple_rag(option):
         return ""
 
 
-def generate_custom_text_for_simple_query_expansion(option):
+def generate_custom_text(option):
     if is_option_match(option, 1):
         return "when was the  an assessment of the useful lives of our server and network equipment completed ? which month was that in?"
     elif is_option_match(option, 2):

@@ -35,7 +35,7 @@ rag_option = st.selectbox(
     (st.session_state.rag_options),
     key=0,
 )
-prompt_value = generate_custom_text_for_simple_query_expansion(rag_option)
+prompt_value = generate_custom_text(rag_option)
 prompt_value = st.text_input(
     key="field_prompt_value",
     value=prompt_value,

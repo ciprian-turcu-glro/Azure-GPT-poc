@@ -17,7 +17,7 @@ if st.session_state.submitted:
     # Step 1: load the text content from the pdf
     #
     from pypdf import PdfReader
-    
+
     file_path = "data/2022_Annual_Report.pdf"
     reader = PdfReader(file_path)
     pdf_texts = [p.extract_text().strip() for p in reader.pages]
@@ -107,7 +107,7 @@ rag_option = st.selectbox(
     (st.session_state.rag_options),
     key=1,
 )
-prompt_value = generate_custom_text_for_simple_rag(rag_option)
+prompt_value = generate_custom_text(rag_option)
 prompt_value = st.text_input(
     key="field_prompt_value",
     value=prompt_value,
