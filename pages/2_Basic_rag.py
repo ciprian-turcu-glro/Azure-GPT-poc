@@ -17,7 +17,8 @@ if st.session_state.submitted:
     # Step 1: load the text content from the pdf
     #
     from pypdf import PdfReader
-
+    
+    file_path = "data/2022_Annual_Report.pdf"
     reader = PdfReader(file_path)
     pdf_texts = [p.extract_text().strip() for p in reader.pages]
 
