@@ -1,5 +1,6 @@
 import fitz
 
+# extracting the text from a file path
 def read_pdf(file_path):
     text = ""
     try:
@@ -15,9 +16,11 @@ def read_pdf(file_path):
         print(f"Error reading PDF file: {e}")
     
     return text
-pdf_file_path = "../../data/2022_Annual_Report.pdf"
+pdf_file_path = "../../data/BD-D100_D120GV_XGV.pdf"
 pdf_text = read_pdf(pdf_file_path)
-with open("../../data/pymupdf_contents.txt", "w") as file:
+
+# writing the extracted text to a file
+with open("../../data/D100_D120GV_XGV-pymupdf.txt", "w") as file:
     file.write(pdf_text)
 
 print("String has been written to the file.")
