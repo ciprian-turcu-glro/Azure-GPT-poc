@@ -209,7 +209,7 @@ def openai_prompt_request(
     default_messages = [
         {
             "role": "system",
-            "content": "You are a helpful expert financial research assistant. Provide an example answer to the given question, that might be found in a document like an annual report. ",
+            "content": "You are a helpful assistant. You help users answer questions from the provided manual.",
         },
         {"role": "user", "content": query},
     ]
@@ -233,7 +233,7 @@ def openai_prompt_request(
 # RAG
 def apply_rag(
     query,
-    pdf="./data/2022_Annual_Report.pdf",
+    pdf="./data/BD-D100_D120GV_XGV.pdf",
     n_results=5,
     query_include=["metadatas", "documents", "distances"],
 ):
@@ -243,7 +243,7 @@ def apply_rag(
         # from pypdf import PdfReader
 
         # reader = PdfReader(pdf)
-        reader = getPyMuPDF(pdf)
+        reader = read_pdf_with_pyMuPDF(pdf)
         # pdf_texts = [p.extract_text().strip() for p in reader.pages]
         pdf_texts = reader
 
@@ -319,7 +319,7 @@ def apply_rag(
 
 
 def embedding_adapters(
-    file="data/2022_Annual_Report.pdf", collection_name="microsoft_annual_report_2022"
+    file="data/D100_D120GV_XGV.pdf", collection_name="microsoft_annual_report_2022"
 ):
     embedding_function = SentenceTransformerEmbeddingFunction()
 
@@ -434,8 +434,8 @@ def generate_queries(model="Chip-GPT4-32k"):
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful expert financial research assistant. You help users analyze financial statements to better understand companies. "
-            "Suggest 10 to 15 short questions that are important to ask when analyzing an annual report. "
+            "content": "You are a helpful assistant. You help users answer questions from the provided context. "
+            "Suggest 10 to 15 short questions that are important to ask when analyzing the givem context. "
             "Do not output any compound questions (questions with multiple sentences or conjunctions)."
             "Output each question on a separate line divided by a newline.",
         },
@@ -454,8 +454,8 @@ def evaluate_results(query, statement, model="Chip-GPT4-32k"):
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful expert financial research assistant. You help users analyze financial statements to better understand companies. "
-            "For the given query, evaluate whether the following satement is relevant."
+            "content": "You are a helpful assistant. You help users answer questions from the provided context."
+            "For the given query statement, evaluate whether the following satement is relevant."
             "Output only 'yes' or 'no'.",
         },
         {"role": "user", "content": f"Query: {query}, Statement: {statement}"},
@@ -496,3 +496,22 @@ def get_session_variables():
             "value": ["pdfminer", "pyMuPDF"],
         },
     ]
+
+
+
+# extracting the text from a file path
+def read_pdf_with_pyMuPDF(file_path):
+    text = ""
+    try:
+        # Open the PDF file
+        with fitz.open(file_path) as pdf_file:
+            # Iterate through each page
+            for page_number in range(pdf_file.page_count):
+                # Get the current page
+                page = pdf_file.load_page(page_number)
+                # Extract text from the current page
+                text += page.get_text()
+    except Exception as e:
+        print(f"Error reading PDF file: {e}")
+
+    return text

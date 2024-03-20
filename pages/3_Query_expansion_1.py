@@ -59,8 +59,8 @@ if st.session_state.submitted:
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
-            "You will be shown the user's question, and the relevant information from the annual report. Answer the user's question using only this information.",
+            "content": "You are a helpful assistant. You help users answer questions from the provided manual."
+            "You will be shown the user's question, and the relevant information from the user manual. Answer the user's question using only this information.",
         },
         {
             "role": "user",

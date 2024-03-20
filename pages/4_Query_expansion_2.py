@@ -47,7 +47,8 @@ if st.session_state.submitted:
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
+            # "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
+            "content": "You are a helpful assistant. You help users achieve their goals based on what they ask."
             "Suggest up to 5 additional related questions to help them find the information they need, for the provided question"
             "Suggest only short questions without compound sentances. Suggest a variety of questions that cover different aspects of the topic."
             "Make sure they are complete questions, and they are related to the original question.",
@@ -64,12 +65,17 @@ if st.session_state.submitted:
     completion = openai_prompt_request(
         augmented_prompt, "Chip-GPT4-32k", custom_messages
     )
-    augmented_prompted_response = completion + prompt_value
-    retrieved_documents = apply_rag(query=augmented_prompted_response)
+    augmented_prompted_response = "'''" + completion + "'''\n" + prompt_value
+    print(augmented_prompted_response)
+    retrieved_documents = apply_rag(
+        query=augmented_prompted_response,
+        pdf="./data/BD-D100_D120GV_XGV.pdf",
+    )
+    #  "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
     messages = [
         {
             "role": "system",
-             "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
+            "content": "You are a helpful assistant. You help users answer questions from the provided manual."
             "You will be shown the user's question, and the relevant information from the annual report. Answer the user's question using only this information.",
         },
         {

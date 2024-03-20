@@ -18,7 +18,7 @@ if st.session_state.submitted:
     #
     from pypdf import PdfReader
 
-    file_path = "data/2022_Annual_Report.pdf"
+    file_path = "data/D100_D120GV_XGV.pdf"
     reader = PdfReader(file_path)
     pdf_texts = [p.extract_text().strip() for p in reader.pages]
 
