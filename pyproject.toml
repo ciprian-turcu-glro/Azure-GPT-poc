@@ -20,6 +20,7 @@ torch = "^2.2.1"
 tqdm = "^4.66.2"
 matplotlib = "^3.8.3"
 pdfminer = "^20191125"
+tabula-py = "^2.9.0"
 
 
 [build-system]

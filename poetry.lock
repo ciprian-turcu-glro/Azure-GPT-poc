@@ -632,6 +632,17 @@ wrapt = ">=1.10,<2"
 dev = ["PyTest", "PyTest-Cov", "bump2version (<1)", "sphinx (<2)", "tox"]
 
 [[package]]
+name = "distro"
+version = "1.9.0"
+description = "Distro - an OS platform information API"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2"},
+    {file = "distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed"},
+]
+
+[[package]]
 name = "fastapi"
 version = "0.110.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
@@ -3950,6 +3961,28 @@ files = [
 mpmath = ">=0.19"
 
 [[package]]
+name = "tabula-py"
+version = "2.9.0"
+description = "Simple wrapper for tabula-java, read tables from PDF into DataFrame"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "tabula-py-2.9.0.tar.gz", hash = "sha256:a2cc01970e799bf66206d8b30deb22bbc325d6847460c3197d5bc2063cb34713"},
+    {file = "tabula_py-2.9.0-py3-none-any.whl", hash = "sha256:7c29b1331e2ea79a4e3e87861a0c01de6f7c249d841e61074ac67cfd4b37e656"},
+]
+
+[package.dependencies]
+distro = "*"
+numpy = "*"
+pandas = ">=0.25.3"
+
+[package.extras]
+dev = ["Flake8-pyproject", "black", "flake8", "isort", "mypy", "pytest"]
+doc = ["Jinja2 (==3.1.2)", "sphinx (==7.1.2)", "sphinx-rtd-theme (==1.3.0)"]
+jpype = ["jpype1"]
+test = ["pytest"]
+
+[[package]]
 name = "tenacity"
 version = "8.2.3"
 description = "Retry code until it succeeds"
@@ -4930,4 +4963,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7ad1e6c27429c102ffdab3efc1fdae8d12b57cde6191ba5be5f0347b0a220f49"
+content-hash = "b97bb6b20f4d3a21c1a622c5b03ac0d2597540b26a5be0a5991a1081868f8d6f"
