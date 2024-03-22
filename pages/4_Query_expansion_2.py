@@ -112,3 +112,5 @@ st.button(
 res_container = st.empty()
 if st.session_state.submitted:
     process_response(completion)
+
+# for the program Duvet what's the washing max load ?

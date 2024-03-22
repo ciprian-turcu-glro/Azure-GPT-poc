@@ -78,6 +78,8 @@ if st.session_state.submitted:
     augmented_prompted_response = augmented_response + prompt_value
     retrieved_documents = apply_rag(
         query=augmented_prompted_response,
+        pdf="./data/BD-D100_D120GV_XGV.pdf",
+
         n_results=20,
         query_include=["documents", "distances"],
     )
@@ -97,7 +99,7 @@ if st.session_state.submitted:
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
+            "content": "You are a helpful assistant. You help users achieve their goals based on what they ask, based on a instruction manual"
             "You will be shown the user's question, and the relevant information from the annual report. Answer the user's question using only this information.",
         },
         {
@@ -125,3 +127,4 @@ st.button(
 res_container = st.empty()
 if st.session_state.submitted:
     process_response(completion)
+    # what's the washing max load for Duvet in kg?
