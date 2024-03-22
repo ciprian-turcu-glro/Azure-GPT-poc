@@ -2,6 +2,7 @@ import os
 import time
 import streamlit as st
 import openai
+from extract_lib import save_to_file
 
 from helper_utils import load_chroma, word_wrap, project_embeddings
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
@@ -9,7 +10,7 @@ import numpy as np
 import umap
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-import fitz  
+import fitz
 
 import torch
 
@@ -28,11 +29,12 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 def getPyMuPDF(file):
-    doc = fitz.open(file) 
+    doc = fitz.open(file)
     text = ""
-    for page in doc: 
+    for page in doc:
         text += page.get_text()
     return text
+
 
 def initialise_variables(session_variables):
     for variable in session_variables:
@@ -243,9 +245,8 @@ def apply_rag(
         # from pypdf import PdfReader
 
         # reader = PdfReader(pdf)
-        reader = read_pdf_with_pyMuPDF(pdf)
+        pdf_texts = read_pdf_with_pyMuPDF(pdf)
         # pdf_texts = [p.extract_text().strip() for p in reader.pages]
-        pdf_texts = reader
 
         # Filter the empty strings
         # --
@@ -301,7 +302,11 @@ def apply_rag(
 
         # list of stringed id's for identifying the chunks of documents in the collection
         # --
+        print("--------------token_split_texts", token_split_texts)
         ids = [str(i) for i in range(len(token_split_texts))]
+        save_to_file(
+            " ".join(map(str, token_split_texts)), "./data/chunks/chunks_test.txt"
+        )
 
         chroma_collection.add(ids=ids, documents=token_split_texts)
         chroma_collection.count()
@@ -486,7 +491,7 @@ def get_session_variables():
         {"name": "submitted", "value": False},
         {"name": "field_textarea_value", "value": ""},
         {"name": "final_response", "value": ""},
-    {"name": "rag_selectbox", "value": ""},
+        {"name": "rag_selectbox", "value": ""},
         {
             "name": "rag_options",
             "value": ["Custom", "Option 1", "Option 2", "Option 3", "Option 4"],
@@ -496,7 +501,6 @@ def get_session_variables():
             "value": ["pdfminer", "pyMuPDF"],
         },
     ]
-
 
 
 # extracting the text from a file path

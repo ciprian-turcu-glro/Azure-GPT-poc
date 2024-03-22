@@ -48,10 +48,14 @@ if st.session_state.submitted:
         {
             "role": "system",
             # "content": "You are a helpful expert financial research assistant. Your users are asking questions about information contained in an annual report."
-            "content": "You are a helpful assistant. You help users achieve their goals based on what they ask."
-            "Suggest up to 5 additional related questions to help them find the information they need, for the provided question"
+            "content": "You are a helpful assistant. You help users achieve their goals based on what they ask, based on a instruction manual",
+        },
+        {
+            "role": "user",
+            "content": "The user will ask questions about information they are searching for in an instruction manual that is about a washer dryer."
+            "Suggest up to 5 additional related questions to help them find the information they need, similar and related to the provided question"
             "Suggest only short questions without compound sentances. Suggest a variety of questions that cover different aspects of the topic."
-            "Make sure they are complete questions, and they are related to the original question.",
+            "Make sure your response are questions examples.Make sure they are complete questions,make sure that they are questions and they are related to the original question.",
         },
         {
             "role": "user",
@@ -59,12 +63,15 @@ if st.session_state.submitted:
         },
     ]
     augmented_response = openai_prompt_request(prompt_value, custom_messages=messages)
+    save_to_file(augmented_response,'./data/chunks/augmented_response.txt')
     augmented_prompt = augmented_response + prompt_value
     # generate propper request for
     custom_messages = custom_messages_generating(rag_story, [], prompt=augmented_prompt)
     completion = openai_prompt_request(
         augmented_prompt, "Chip-GPT4-32k", custom_messages
     )
+    save_to_file(completion,'./data/chunks/completion.txt')
+    print("----------------------completion:", completion)
     augmented_prompted_response = "'''" + completion + "'''\n" + prompt_value
     print(augmented_prompted_response)
     retrieved_documents = apply_rag(
@@ -75,8 +82,10 @@ if st.session_state.submitted:
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful assistant. You help users answer questions from the provided manual."
-            "You will be shown the user's question, and the relevant information from the annual report. Answer the user's question using only this information.",
+            "content": "You are a helpful assistant. You help users answer questions from the provided details."
+            "the provided details are chunks from a instruction manual of a washer dryer applience."
+            "Do not reffer the user to the manual for more information as an answer."
+            "You will be shown the user's question, and the relevant information from the provided text. Answer the user's question using only this information that is provided inside the prompt.",
         },
         {
             "role": "user",
